@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Korth &amp; Shannahan Case Study | Vinayak Vallabhaneni</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f4ef;
+    --surface: #eeeae2;
+    --border: #d8d2c6;
+    --muted: #6b6560;
+    --body: #2e2b27;
+    --paper: #1a1917;
+    --accent: #b8620e;
+    --accent-dim: rgba(184,98,14,0.1);
+    --white: #111010;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Source Serif 4', serif;
+    background: var(--bg);
+    color: var(--body);
+    font-size: 15px;
+    line-height: 1.65;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.035;
+  }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.1rem 3.5rem;
+    border-bottom: 1px solid var(--border);
+    background: rgba(247,244,239,0.95);
+    backdrop-filter: blur(12px);
+  }
+  .nav-mark {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem; font-weight: 900; color: var(--white);
+    letter-spacing: 0.01em; text-decoration: none;
+  }
+  .nav-mark span { color: var(--accent); }
+  .nav-back {
+    display: flex; align-items: center; gap: 0.5rem;
+    font-size: 0.72rem; font-weight: 500; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--muted); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-back::before { content: '←'; font-size: 0.85rem; }
+  .nav-back:hover { color: var(--accent); }
+
+  .project-hero { padding-top: 72px; border-bottom: 1px solid var(--border); }
+  .hero-inner { padding: 5rem 3.5rem 4rem; max-width: 860px; }
+
+  .breadcrumb {
+    display: flex; align-items: center; gap: 0.6rem;
+    font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 2rem;
+    opacity: 0; animation: rise 0.5s 0.1s forwards;
+  }
+  .breadcrumb span { color: var(--accent); }
+
+  .project-tag {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 1.5rem; font-weight: 500;
+    opacity: 0; animation: rise 0.5s 0.15s forwards;
+  }
+  .project-tag::before { content: ''; width: 24px; height: 1px; background: var(--accent); }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 5vw, 4.2rem);
+    font-weight: 900; line-height: 1.05; color: var(--white);
+    letter-spacing: -0.02em; margin-bottom: 1.5rem;
+    opacity: 0; animation: rise 0.6s 0.25s forwards;
+  }
+
+  .project-summary {
+    font-size: 1.05rem; line-height: 1.85; font-weight: 300;
+    color: var(--body); max-width: 62ch; margin-bottom: 2.5rem;
+    opacity: 0; animation: rise 0.6s 0.35s forwards;
+  }
+
+  .meta-row {
+    display: flex; flex-wrap: wrap; gap: 2.5rem;
+    padding-top: 2rem; border-top: 1px solid var(--border);
+    opacity: 0; animation: rise 0.6s 0.45s forwards;
+  }
+  .meta-label {
+    font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); font-weight: 500; margin-bottom: 0.3rem;
+  }
+  .meta-value { font-size: 0.88rem; color: var(--white); font-weight: 500; }
+
+  .results-bar {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .result-item {
+    padding: 2.4rem 2.8rem;
+    border-right: 1px solid var(--border);
+    opacity: 0; animation: rise 0.5s forwards;
+  }
+  .result-item:last-child { border-right: none; }
+  .result-n {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.6rem; font-weight: 900; color: var(--white);
+    line-height: 1; margin-bottom: 0.3rem;
+  }
+  .result-n span { color: var(--accent); }
+  .result-change {
+    font-size: 0.75rem; color: #2a7a3b; font-weight: 600;
+    letter-spacing: 0.04em; margin-bottom: 0.35rem;
+    display: flex; align-items: center; gap: 0.3rem;
+  }
+  .result-change::before { content: '↑'; }
+  .result-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
+
+  .section {
+    padding: 5rem 3.5rem;
+    border-bottom: 1px solid var(--border);
+    position: relative; z-index: 1;
+  }
+  .section-inner {
+    display: grid; grid-template-columns: 240px 1fr; gap: 4rem;
+  }
+  .section-label {
+    font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600; margin-bottom: 0.5rem;
+  }
+  .section-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.2rem, 2vw, 1.7rem);
+    font-weight: 900; color: var(--white);
+    letter-spacing: -0.02em; line-height: 1.2;
+    position: sticky; top: 96px;
+  }
+
+  .prose p {
+    font-size: 0.95rem; line-height: 1.85; color: var(--body);
+    font-weight: 400; margin-bottom: 1.4rem;
+  }
+  .prose p:last-child { margin-bottom: 0; }
+
+  .timeline { display: flex; flex-direction: column; position: relative; padding-left: 1.5rem; }
+  .timeline::before {
+    content: ''; position: absolute; left: 0; top: 8px; bottom: 8px;
+    width: 1px; background: var(--border);
+  }
+  .tl-item { position: relative; padding: 0 0 2.8rem 2.2rem; }
+  .tl-item:last-child { padding-bottom: 0; }
+  .tl-dot {
+    position: absolute; left: -1.5rem; top: 5px;
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--bg); border: 2px solid var(--border);
+    transform: translateX(-4px);
+  }
+  .tl-item.active .tl-dot { background: var(--accent); border-color: var(--accent); }
+  .tl-period {
+    font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600; margin-bottom: 0.4rem;
+  }
+  .tl-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem; font-weight: 700; color: var(--white);
+    margin-bottom: 0.6rem; line-height: 1.2;
+  }
+  .tl-body { font-size: 0.88rem; color: var(--body); line-height: 1.8; font-weight: 400; max-width: 56ch; }
+
+  .initiatives { display: flex; flex-direction: column; }
+  .init-item {
+    padding: 1.6rem 0; border-bottom: 1px solid var(--border);
+    display: grid; grid-template-columns: 28px 1fr; gap: 1.2rem;
+  }
+  .init-item:first-child { border-top: 1px solid var(--border); }
+  .init-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.78rem; font-weight: 700; color: var(--accent); padding-top: 0.1rem;
+  }
+  .init-title { font-size: 0.88rem; font-weight: 600; color: var(--white); margin-bottom: 0.4rem; }
+  .init-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.75; font-weight: 400; }
+
+  .chart-wrap { background: var(--surface); border: 1px solid var(--border); padding: 2.2rem; }
+  .chart-header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 1.8rem; flex-wrap: wrap; gap: 1rem;
+  }
+  .chart-title { font-family: 'Playfair Display', serif; font-size: 0.95rem; font-weight: 700; color: var(--white); margin-bottom: 0.2rem; }
+  .chart-sub { font-size: 0.72rem; color: var(--muted); }
+  .chart-legend { display: flex; gap: 1.5rem; align-items: center; }
+  .legend-item { display: flex; align-items: center; gap: 0.45rem; font-size: 0.72rem; color: var(--muted); }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .chart-container { position: relative; height: 260px; }
+  .chart-note {
+    font-size: 0.75rem; color: var(--muted); margin-top: 1rem;
+    padding-top: 1rem; border-top: 1px solid var(--border); line-height: 1.65;
+  }
+
+  .infra-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 1px; background: var(--border); border: 1px solid var(--border);
+  }
+  .infra-card { background: var(--bg); padding: 1.6rem; }
+  .infra-card-label {
+    font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 0.6rem; font-weight: 600;
+  }
+  .infra-card-title { font-size: 0.88rem; font-weight: 600; color: var(--white); margin-bottom: 0.5rem; }
+  .infra-card-body { font-size: 0.82rem; color: var(--muted); line-height: 1.7; font-weight: 400; }
+
+  footer {
+    background: var(--paper); padding: 3rem 3.5rem;
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem;
+  }
+  .footer-label { font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(247,244,239,0.35); margin-bottom: 0.4rem; }
+  .footer-name { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: #f7f4ef; }
+  .footer-right { display: flex; gap: 1rem; }
+  .footer-link {
+    font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase;
+    color: rgba(247,244,239,0.4); text-decoration: none;
+    border: 1px solid rgba(247,244,239,0.1); padding: 0.5rem 1rem; transition: all 0.2s;
+  }
+  .footer-link:hover { color: #f7f4ef; border-color: rgba(247,244,239,0.3); }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.6s, transform 0.6s; }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (max-width: 760px) {
+    nav { padding: 1rem 1.5rem; }
+    .hero-inner { padding: 3rem 1.5rem 2.5rem; }
+    .section { padding: 3.5rem 1.5rem; }
+    .section-inner { grid-template-columns: 1fr; gap: 2rem; }
+    .section-heading { position: static; }
+    .results-bar { grid-template-columns: 1fr 1fr; }
+    .result-item:nth-child(2) { border-right: none; }
+    .result-item:nth-child(3) { border-top: 1px solid var(--border); }
+    .infra-grid { grid-template-columns: 1fr; }
+    footer { padding: 2.5rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-mark" href="https://vinvallabhaneni-pixel.github.io/portfolio">V<span>.</span>V</a>
+  <a class="nav-back" href="https://vinvallabhaneni-pixel.github.io/portfolio">Back to portfolio</a>
+</nav>
+
+<div class="project-hero">
+  <div class="hero-inner">
+    <div class="breadcrumb">Portfolio <span>/</span> Case Study</div>
+    <div class="project-tag">Digital Marketing · Home Services</div>
+    <h1>Korth &amp; Shannahan:<br>Paid Search, Web,<br>and Customer Data</h1>
+    <p class="project-summary">I run digital marketing for a family-owned painting and carpentry contractor serving Westchester County. The work centers on Google Ads campaign management, supported by the website, the customer database, search visibility, email, and social, all built so that each piece sends the right homeowners to the same place.</p>
+    <div class="meta-row">
+      <div class="meta-item">
+        <div class="meta-label">Company</div>
+        <div class="meta-value">Korth &amp; Shannahan Painting and Carpentry</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Role</div>
+        <div class="meta-value">Digital Marketing Specialist</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Industry</div>
+        <div class="meta-value">Residential Painting and Carpentry, Westchester NY</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Focus</div>
+        <div class="meta-value">Google Ads, CMS, CRM, SEO, Social, Email</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="section-inner reveal">
+    <div class="section-left">
+      <div class="section-label">Background</div>
+      <h2 class="section-heading">The situation</h2>
+    </div>
+    <div class="section-right">
+      <div class="prose">
+        <p>Korth &amp; Shannahan is a family-owned painting and finish carpentry company that has worked in Westchester since 1979. Its projects are large and high-value, so the goal was never broad traffic. It was leads from the right towns, tracked back to the work that produced them.</p>
+        <p>Three constraints shaped the approach. The website runs on a managed WordPress theme that cannot be edited directly. The customer list had grown to thousands of contacts with uneven data. And search visibility was far below what a business of this size should have, with very few clicks for the number of impressions.</p>
+        <p>I started with paid search and the data underneath it, then rebuilt the pages those campaigns and emails send people to.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background: var(--surface);">
+  <div class="section-inner reveal">
+    <div class="section-left">
+      <div class="section-label">Work</div>
+      <h2 class="section-heading">What I run</h2>
+    </div>
+    <div class="section-right">
+      <div class="initiatives">
+        <div class="init-item">
+          <div class="init-num">01</div>
+          <div class="init-content">
+            <div class="init-title">Google Ads Campaign Management</div>
+            <div class="init-desc">Built and manage the company's Google Ads campaign. Instead of bidding across all of Westchester, the campaign is aimed at a short list of high-value towns, including Scarsdale, Chappaqua, Larchmont, Pound Ridge, Armonk, Rye, and Bronxville, because the projects the company wants are large and the budget has to go where those homeowners are. Each campaign points to a dedicated landing page on its own subdomain rather than the general site, so the page can match the ad. The Google Ads conversion tag and call tracking are carried across the rebuilt pages so a phone call can be traced to the campaign that produced it. I also manage account access and user permissions, and I own the marketing budget the campaign runs on.</div>
+          </div>
+        </div>
+        <div class="init-item">
+          <div class="init-num">02</div>
+          <div class="init-content">
+            <div class="init-title">CMS and Website Work</div>
+            <div class="init-desc">Rebuilt the homepage, Customer HQ, Areas Served, and Project Gallery pages for a site that runs on a managed WordPress theme with no direct theme access. Each page is a self-contained Custom HTML widget in Elementor, so it can be pasted in and updated without touching theme files. The live header and blog were restyled sitewide through one Additional CSS file built on brand variables, so every page picks up the change at once. The Customer HQ page now opens with the FAQ and the company's commitments, and the gallery uses a photo lightbox on a brand-color background.</div>
+          </div>
+        </div>
+        <div class="init-item">
+          <div class="init-num">03</div>
+          <div class="init-content">
+            <div class="init-title">CRM and Customer List Management</div>
+            <div class="init-desc">Took a contact export of 5,757 records and sorted it by engagement into five groups: active in the last 12 months, lukewarm, cold, never engaged, and new. That produced a 4,005-contact keep list and a 1,726-contact win-back list, with 26 records set aside for data problems such as two addresses in one field. Separately, 2,209 contacts had a full name typed into the first name field with the last name blank. I split those automatically and flagged the 64 ambiguous cases, such as couples or business names, for a manual decision instead of guessing. I also flagged that bounced and unsubscribed contacts need a separate export and should never be mailed again.</div>
+          </div>
+        </div>
+        <div class="init-item">
+          <div class="init-num">04</div>
+          <div class="init-content">
+            <div class="init-title">Email Marketing and List Segmentation</div>
+            <div class="init-desc">Designed the seasonal email campaigns in table-based HTML that holds up across email clients: a fall offer pairing a full exterior project with a free day of interior painting, a follow-up for homeowners who still want exterior work done before winter, and a later-season discount send. Sends are matched to the segments above, so engaged customers get the offer and the win-back list is handled separately from the keep list.</div>
+          </div>
+        </div>
+        <div class="init-item">
+          <div class="init-num">05</div>
+          <div class="init-content">
+            <div class="init-title">SEO</div>
+            <div class="init-desc">Ran a full-site audit that included a 35-page inventory, a broken-link log, and migration notes for any future redesign. The Search Console report showed 31,061 impressions producing 98 clicks, a 0.32 percent click-through rate, and separated two different problems. The carpentry page earned over 12,000 impressions but ranked around page four, which is a ranking problem. A blog post ranking first for a molding term earned no clicks, which points to either a weak snippet or searchers who were never going to hire. That split decided what to fix first, and it led to a town-level landing page template for the high-intent local searches the site was barely ranking for.</div>
+          </div>
+        </div>
+        <div class="init-item">
+          <div class="init-num">06</div>
+          <div class="init-content">
+            <div class="init-title">Social Media</div>
+            <div class="init-desc">Support the company's social presence using the same project photography, seasonal offers, and messaging that run on the website and in email, so a homeowner sees one consistent story across every channel.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-inner reveal">
+    <div class="section-left">
+      <div class="section-label">Systems</div>
+      <h2 class="section-heading">How the pieces connect</h2>
+    </div>
+    <div class="section-right">
+      <div class="prose" style="margin-bottom: 2rem;">
+        <p>Each channel feeds the others. Ads send homeowners to purpose-built pages, call tracking shows which campaign earned the call, search data decides which town pages to build next, and the segmented list decides who receives which email.</p>
+      </div>
+      <div class="infra-grid">
+        <div class="infra-card">
+          <div class="infra-card-label">Paid Search</div>
+          <div class="infra-card-title">Google Ads + Call Tracking</div>
+          <div class="infra-card-body">Town-targeted campaign, dedicated landing page, conversion tag, and call tracking so leads trace back to the campaign.</div>
+        </div>
+        <div class="infra-card">
+          <div class="infra-card-label">Website</div>
+          <div class="infra-card-title">WordPress + Elementor + CSS</div>
+          <div class="infra-card-body">Custom HTML widgets for core pages and one sitewide stylesheet for the header and blog, built around a theme that cannot be edited directly.</div>
+        </div>
+        <div class="infra-card">
+          <div class="infra-card-label">Customer Data</div>
+          <div class="infra-card-title">Segmented CRM List</div>
+          <div class="infra-card-body">Engagement-based groups, a keep list, a win-back list, and name fields repaired before any send.</div>
+        </div>
+        <div class="infra-card">
+          <div class="infra-card-label">SEO</div>
+          <div class="infra-card-title">Search Console + Page Inventory</div>
+          <div class="infra-card-body">Page-level and query-level analysis that separates ranking problems from snippet problems and sets the order of fixes.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-left">
+    <div class="footer-label">Case Study by</div>
+    <div class="footer-name">Vinayak Vallabhaneni</div>
+  </div>
+  <div class="footer-right">
+    <a href="https://vinvallabhaneni-pixel.github.io/portfolio" class="footer-link">← Portfolio</a>
+    <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#118;&#105;&#110;&#46;&#118;&#97;&#108;&#108;&#97;&#98;&#104;&#97;&#110;&#101;&#110;&#105;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;" class="footer-link">Get in touch</a>
+  </div>
+</footer>
+
+<script>
+const reveals = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+}, { threshold: 0.1 });
+reveals.forEach(el => io.observe(el));
+</script>
+</body>
+</html>
